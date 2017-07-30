@@ -1,17 +1,19 @@
 package com.sevendays.ch1;
 
-public class Uninterruptible {
+import java.util.concurrent.locks.ReentrantLock;
+
+public class Interruptible {
 	public static void main(String[] args) throws InterruptedException {
-		final Object o1 = new Object();
-		final Object o2 = new Object();
+		final ReentrantLock r1 = new ReentrantLock();
+		final ReentrantLock r2 = new ReentrantLock();
+		
 		Thread t1 = new Thread() {
 			@Override
 			public void run() {
 				try {
-					synchronized(o1) {
-						Thread.sleep(1000);
-							synchronized(o2) {}
-					}
+					r1.lockInterruptibly();
+					Thread.sleep(1000);
+					r2.lockInterruptibly();
 				} catch (InterruptedException e) {
 					System.out.println("t1 interrupted");
 				} finally {
@@ -24,10 +26,9 @@ public class Uninterruptible {
 			@Override
 			public void run() {
 				try {
-					synchronized(o2) {
-						Thread.sleep(1000);
-							synchronized(o1) {}
-					}
+					r2.lockInterruptibly();
+					Thread.sleep(1000);
+					r1.lockInterruptibly();
 				} catch (InterruptedException e) {
 					System.out.println("t2 interrupted");
 				} finally {
