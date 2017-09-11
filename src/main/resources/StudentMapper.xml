@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.babayetu.dao.StudentMapper">
+
+	<resultMap type="StudentEntity" id="studentResultMap">
+		<id property="id" column="id"/>
+		<result property="studentName" column="STUDENT_NAME"/>
+		<result property="studentSex" column="STUDENT_SEX"/>
+		<result property="studentBirthday" column="STUDENT_BIRTHDAY"/>
+		<result property="updateTime" column="update_time"/>
+		<result property="createTime" column="create_time"/>
+		<association property="classEntity" column="CLASS_ID" javaType="ClassEntity" resultMap="classResult"/>
+	</resultMap>
+	
+	<resultMap id="classResult" type="ClassEntity">
+		<id property="classId" column="CLASS_ID"/>
+	</resultMap>
+	
+	<!-- 查询学生，根据id -->
+	<select id="getStudent" parameterType="String" resultType="StudentEntity" resultMap="studentResultMap">
+			SELECT * from STUDENT_TBL ST
+				WHERE ST.STUDENT_ID = #{studentID} 
+	</select>
+	
+	<!-- 查询学生列表 -->
+	<select id="getStudentAll"  resultType="StudentEntity" resultMap="studentResultMap">
+			SELECT * from STUDENT_TBL
+	</select>
+	
+    <!-- 表更新记录 -->
+  <select id="selectIncrementData" parameterType="java.util.Date" resultMap="studentResultMap" resultType="StudentEntity">
+    SELECT * from STUDENT_TBL ST
+    where
+    update_time &gt;
+    #{updateTime,jdbcType=TIMESTAMP}
+    order by
+    update_time desc
+  </select>
+  
+  <select id="selectMaxLastUpdateTime" resultType="long">
+    select IFNULL(unix_timestamp(max(update_time)),0) update_time from STUDENT_TBL
+  </select>
+  
+  <insert id="insertStudent" parameterType="StudentEntity" useGeneratedKeys="true" keyProperty="id">
+    insert into STUDENT_TBL (STUDENT_NAME,update_time,create_time)
+    values (#{studentName},#{updateTime},#{createTime})
+  </insert>
+</mapper>
