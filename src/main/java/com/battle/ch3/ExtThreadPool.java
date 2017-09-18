@@ -37,7 +37,7 @@ public class ExtThreadPool {
 		}
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		ThreadPoolExecutor tpe = new ThreadPoolExecutor(5,5,0,TimeUnit.SECONDS,new LinkedBlockingQueue<Runnable>()) {
 			@Override
 			protected void beforeExecute(Thread paramThread, Runnable r) {
@@ -58,7 +58,9 @@ public class ExtThreadPool {
 		
 		for (int i = 0; i < 10; i++) {
 			AnTask anTask = new AnTask("AnTask-" + i);
-			tpe.submit(anTask);
+//			tpe.submit(anTask);   //实际运行的是FutureTask对象，封装了Callable对象
+			tpe.execute(anTask);	//实际运行的是Runnable对象，这是不同的
+			Thread.sleep(10);
 		}
 		
 		tpe.shutdown();
