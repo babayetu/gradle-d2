@@ -1,8 +1,12 @@
 package com.battle.ch5;
 
 public class PCData {
-	private final int data;
+	private int data;
 
+	public PCData() {
+		
+	}
+	
 	public PCData(int data) {
 		this.data = data;
 	}
@@ -15,6 +19,10 @@ public class PCData {
 		return data;
 	}
 
+	public void setData(int data) {
+		this.data = data;
+	}
+	
 	@Override
 	public String toString() {
 		return "PCData [data=" + data + "]";
