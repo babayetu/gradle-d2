@@ -18,6 +18,7 @@ dependencies {
     compile(group: 'mysql', name: 'mysql-connector-java', version:'5.1.31')
     compile(group: 'com.lmax', name: 'disruptor', version:'3.3.7')
     compile(group: 'com.google.guava', name: 'guava', version:'22.0')
+    compile(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version:'2.5.5')
     testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'1.5.7.RELEASE') {
         exclude(module: 'commons-logging')
     }
